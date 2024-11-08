@@ -19,11 +19,8 @@ function run(){
         console.log('user connected')
         socket.on('message', async (messageInfo) => {
             try{
-                console.log(messageInfo.translate, 'testing translate')
-                // console.log(`message before translation ${message}`)
                 const prompt = `only respond with ${messageInfo.message} translated into ${messageInfo.translate}`
                 const result = await model.generateContent(prompt)
-                console.log('message', `${socket.id.substr(0,2)} said: ${messageInfo.message} \n Translation: ${result.response.text()}.`)
                 await io.emit('message', `${socket.id.substr(0,2)} said: ${messageInfo.message}\n${result.response.text()}.`)
             }
             catch(error){
@@ -33,7 +30,6 @@ function run(){
         })
     })
 }
-    
 
 server.listen(8000, () => {
     console.log('server running on http://localhost:8000')

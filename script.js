@@ -2,7 +2,10 @@ const socket = io('ws://localhost:8000') // Connect to server
 
 //speech to text
 const synth = window.speechSynthesis
-const voices = synth.getVoices()//populate voices
+let voices = []
+synth.onvoiceschanged = function(){
+  voices = synth.getVoices()
+}
 
 //text to speech variables
 var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
@@ -24,6 +27,7 @@ var displayMessage = document.querySelector('#msgDisplay')
 
 //"translation to" textbox
 const tCheckbox = document.querySelector('input[type="checkbox"]')
+var language = ''
 
 //voice button click
 voiceButton.onclick = function() {
@@ -53,7 +57,7 @@ recognition.onerror = function(event) {
 
 
 //text to speech
-function speakMessage(spanishText){
+function speakMessage(languageText, language){
   if (synth.speaking) {
     console.error("speechSynthesis.speaking")
     return
@@ -61,7 +65,7 @@ function speakMessage(spanishText){
 
   if (true) {
     //going to change this to whatever language it's translated into
-    const utterThis = new SpeechSynthesisUtterance(spanishText)
+    const utterThis = new SpeechSynthesisUtterance(languageText)
     
 
     //done talking
@@ -77,7 +81,9 @@ function speakMessage(spanishText){
     //voice = spanish or english
     const englishVoice = 'Aaron'
     const spanishVoice = 'Flo (Spanish (Mexico))'
-    const findMyVoice = voices.find(voice => voice.name === englishVoice)
+    const voiceChoice = language === 'Spanish' ? 'Flo (Spanish (Mexico))' : 'Aaron'
+
+    const findMyVoice = voices.find(voice => voice.name === voiceChoice)
 
     utterThis.voice = findMyVoice
     utterThis.pitch = 1
@@ -89,19 +95,18 @@ function speakMessage(spanishText){
 
 socket.on('message', message => {
   displayMessage.value += message + '\n'
-  var spanishText = message.split('\n')[1]
-  speakMessage(spanishText)
+  var languageText = message.split('\n')[1]
+  speakMessage(languageText, language)
 })
 
 sendButton.onclick = function() {
-  var language = ''
   if(tCheckbox.checked){
-    language = 'English'
-    console.log('checked english')
+    language = 'Spanish'
+    console.log('checked Spanish')
   }
   else{
-    language = 'Spanish'
-    console.log('checked spanish')
+    language = 'English'
+    console.log('checked English')
   }
 
   const messageInfo = {

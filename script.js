@@ -47,8 +47,18 @@ recognition.onerror = function(event) {
 }
 
 
+const checkbox = document.querySelector('input[type="checkbox"]')
+
+
+
 //text to speech
 function speakMessage(spanishText){
+  if(checkbox.checked){
+    console.log('it is check')
+  }
+  else{
+    console.log('it is not checked')
+  }
   if (synth.speaking) {
     console.error("speechSynthesis.speaking")
     return

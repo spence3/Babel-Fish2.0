@@ -32,6 +32,8 @@ var language = ''
 //voice button click
 voiceButton.onclick = function() {
   recognition.start()
+  voiceButton.classList.remove('bg-white')
+  voiceButton.classList.add('bg-blue-500')
   console.log('Listening for sentence.')
 }
 
@@ -45,11 +47,15 @@ recognition.onresult = function(event) {
 
 //stop recording when user stops talking
 recognition.onspeechend = function() {
+  voiceButton.classList.remove('bg-blue-500')
+  voiceButton.classList.add('bg-white')
   recognition.stop()
 }
 
 //errors
 recognition.onerror = function(event) {
+  voiceButton.classList.remove('bg-blue-500')
+  voiceButton.classList.add('bg-white')
   diagnostic.textContent = 'Error occurred in recognition: ' + event.error
 }
 
@@ -57,7 +63,7 @@ recognition.onerror = function(event) {
 
 
 //text to speech
-function speakMessage(languageText, language){
+function speakMessage(messageText, language){
   if (synth.speaking) {
     console.error("speechSynthesis.speaking")
     return
@@ -65,7 +71,7 @@ function speakMessage(languageText, language){
 
   if (true) {
     //going to change this to whatever language it's translated into
-    const utterThis = new SpeechSynthesisUtterance(languageText)
+    const utterThis = new SpeechSynthesisUtterance(messageText)
     
 
     //done talking
@@ -95,8 +101,8 @@ function speakMessage(languageText, language){
 
 socket.on('message', message => {
   displayMessage.value += message + '\n'
-  var languageText = message.split('\n')[1]
-  speakMessage(languageText, language)
+  var messageText = message.split('\n')[1]
+  speakMessage(messageText, language)
 })
 
 sendButton.onclick = function() {

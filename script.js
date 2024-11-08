@@ -22,6 +22,9 @@ var voiceButton = document.querySelector('#speech')
 var sendButton = document.querySelector('#send')
 var displayMessage = document.querySelector('#msgDisplay')
 
+//"translation to" textbox
+const tCheckbox = document.querySelector('input[type="checkbox"]')
+
 //voice button click
 voiceButton.onclick = function() {
   recognition.start()
@@ -47,18 +50,10 @@ recognition.onerror = function(event) {
 }
 
 
-const checkbox = document.querySelector('input[type="checkbox"]')
-
 
 
 //text to speech
 function speakMessage(spanishText){
-  if(checkbox.checked){
-    console.log('it is check')
-  }
-  else{
-    console.log('it is not checked')
-  }
   if (synth.speaking) {
     console.error("speechSynthesis.speaking")
     return
@@ -99,9 +94,21 @@ socket.on('message', message => {
 })
 
 sendButton.onclick = function() {
-  // var translateDisplay = displayMessage.value += text + '\n'
-  const send = text
-  socket.emit('message', send)
+  var language = ''
+  if(tCheckbox.checked){
+    language = 'English'
+    console.log('checked english')
+  }
+  else{
+    language = 'Spanish'
+    console.log('checked spanish')
+  }
+
+  const messageInfo = {
+    message: text,
+    translate: language
+  }
+  socket.emit('message', messageInfo)
   diagnostic.value = '' // Clear the input after sending
 
 }

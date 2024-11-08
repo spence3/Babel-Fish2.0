@@ -17,13 +17,14 @@ const io = require('socket.io')(server, {
 function run(){
     io.on('connection', (socket) => {
         console.log('user connected')
-        socket.on('message', async (message) => {
+        socket.on('message', async (messageInfo) => {
             try{
-                console.log(`message before translation ${message}`)
-                const prompt = `only respond with ${message} translated into spanish`
+                console.log(messageInfo.translate, 'testing translate')
+                // console.log(`message before translation ${message}`)
+                const prompt = `only respond with ${messageInfo.message} translated into ${messageInfo.translate}`
                 const result = await model.generateContent(prompt)
-                console.log('message', `${socket.id.substr(0,2)} said: ${message} \n Translation: ${result.response.text()}.`)
-                await io.emit('message', `${socket.id.substr(0,2)} said: ${message}\n${result.response.text()}.`)
+                console.log('message', `${socket.id.substr(0,2)} said: ${messageInfo.message} \n Translation: ${result.response.text()}.`)
+                await io.emit('message', `${socket.id.substr(0,2)} said: ${messageInfo.message}\n${result.response.text()}.`)
             }
             catch(error){
                 console.error("error with translate!", error)

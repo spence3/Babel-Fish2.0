@@ -106,15 +106,7 @@ socket.on('message', message => {
 })
 
 sendButton.onclick = function() {
-  if(tCheckbox.checked){
-    language = 'Spanish'
-    console.log('checked Spanish')
-  }
-  else{
-    language = 'English'
-    console.log('checked English')
-  }
-  // language = tCheckbox.checked === true ? 'Spanish' : 'English'
+  language = tCheckbox.checked === true ? 'Spanish' : 'English'
 
   const messageInfo = {
     message: text,

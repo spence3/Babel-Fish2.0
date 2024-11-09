@@ -4,6 +4,10 @@ const http = require('http')
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 require('dotenv').config();
 
+//static html
+const path = require('path');
+app.use(express.static(path.join(__dirname, '.')));
+
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 const model = genAI.getGenerativeModel({model:"gemini-1.5-flash"})
 
@@ -21,7 +25,7 @@ function run(){
             try{
                 const prompt = `only respond with ${messageInfo.message} translated into ${messageInfo.translate}`
                 const result = await model.generateContent(prompt)
-                await io.emit('message', `${socket.id.substr(0,2)} said: ${messageInfo.message}\n${result.response.text()}.`)
+                await io.emit('message', `${socket.id.substr(0,2)} said: ${messageInfo.message}\n${result.response.text()}`)
             }
             catch(error){
                 console.error("error with translate!", error)

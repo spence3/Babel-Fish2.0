@@ -7,7 +7,7 @@ synth.onvoiceschanged = function(){
   voices = synth.getVoices()
 }
 
-//text to speech variables
+//speech to text variables
 var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
 var SpeechGrammarList = SpeechGrammarList || window.webkitSpeechGrammarList
 var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent
@@ -62,7 +62,7 @@ recognition.onerror = function(event) {
 
 
 
-//text to speech
+//text to speech function
 function speakMessage(messageText, language){
   if (synth.speaking) {
     console.error("speechSynthesis.speaking")
@@ -120,6 +120,6 @@ sendButton.onclick = function() {
     translate: language
   }
   socket.emit('message', messageInfo)
-  diagnostic.value = '' // Clear the input after sending
+  diagnostic.value = ''
 
 }

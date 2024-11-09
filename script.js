@@ -114,6 +114,7 @@ sendButton.onclick = function() {
     language = 'English'
     console.log('checked English')
   }
+  // language = tCheckbox.checked === true ? 'Spanish' : 'English'
 
   const messageInfo = {
     message: text,
